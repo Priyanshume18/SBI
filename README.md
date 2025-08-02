@@ -1,19 +1,12 @@
 # 💼 SBI Hackathon 2025 – Intelligent Loan Risk & Tracking System
 
-A modular system designed for SBI to tackle fraud detection, last-known location tracking of defaulters, and explainable loan approval risk assessment.
+A modular system designed for SBI to tackle fraud detection, last-known location tracking of defaulters, and loan approval risk assessment.
 
 ---
 
-## 🔧 Folder Structure
+## 📁 Folder Structure
 
-.
-├── DB_api/fast_api/ # Backend for CSV-based defaulter prediction & loan approval
-│               └── sbi/venv311/ # Virtual environment (Python 3.11)
-├── ps1/ # Task 1: Fraud/defaulter prediction solution (model + CSV)
-├── sbi-vishnu/sbi-prototype1/ # Frontend + last location predictor FastAPI backend
-├── sbitest.ipynb # Jupyter notebook for Task 1 model inference
-└── README.md # You’re reading it!
----
+<pre> . ├── DB_api/ │ └── fast_api/ # Backend for CSV-based defaulter prediction & loan approval │ └── sbi/ │ └── venv311/ # Python 3.11 virtual environment ├── ps1/ # Task 1: Fraud/defaulter prediction solution (model + CSV) ├── sbi-vishnu/ │ └── sbi-prototype1/ # Frontend + FastAPI for last known location prediction ├── sbitest.ipynb # Jupyter notebook for Task 1 model inference └── README.md # You're reading it! </pre>
 
 ## 🚀 How to Run the System
 
@@ -84,4 +77,4 @@ sbitest.ipynb
 
 ## 📬 Contact
 
-For queries, feel free to reach out via this repo or contact [Priyanshu Maurya(priyanshuiitg2026@gmail.com)] – Team Leader SBI Hackathon
+For queries, feel free to reach out via this repo or contact [Priyanshu Maurya(priyanshuiitg2026@gmail.com)] – Team Leader Idaten, SBI Hackathon
