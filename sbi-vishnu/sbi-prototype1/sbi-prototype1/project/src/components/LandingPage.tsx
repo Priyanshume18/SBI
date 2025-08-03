@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Building2, Shield, Users, TrendingUp, ArrowRight, CheckCircle } from 'lucide-react';
 import sbiLogo from './sbi_logo.png';
+import bcrypt from 'bcryptjs';
+import { supabase } from './supabaseClient';
+
 
 const LandingPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,21 +18,63 @@ const LandingPage: React.FC = () => {
   });
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simple validation and navigation
-    if (isLogin) {
-      if (formData.email && formData.password) {
-        navigate('/home');
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (isLogin) {
+    // Login
+    const { data, error } = await supabase
+      .from('employees')
+      .select('password_hash')
+      .eq('email', formData.email)
+      .single();
+
+    if (error) {
+      alert("User not found");
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(formData.password, data.password_hash);
+    if (isMatch) {
+      navigate('/home');
     } else {
-      if (formData.email && formData.password && formData.confirmPassword && formData.name && formData.employeeId) {
-        if (formData.password === formData.confirmPassword) {
-          navigate('/home');
-        }
+      alert("Invalid credentials");
+    }
+
+  } else {
+    // Sign Up
+    if (
+      formData.email &&
+      formData.password &&
+      formData.confirmPassword &&
+      formData.name &&
+      formData.employeeId
+    ) {
+      if (formData.password !== formData.confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      const password_hash = await bcrypt.hash(formData.password, 10);
+
+      const { error } = await supabase.from('employees').insert([
+        {
+          employee_id: formData.employeeId,
+          email: formData.email,
+          name: formData.name,
+          password_hash: password_hash,
+        },
+      ]);
+
+      if (error) {
+        alert("Signup failed: " + error.message);
+      } else {
+        alert("Signup successful! Please login.");
+        setIsLogin(true);
       }
     }
-  };
+  }
+};
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
