@@ -21,20 +21,36 @@ const LandingPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
+  // 📧 Email validation
+  const email = formData.email.trim().toLowerCase();
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@iitg\.ac\.in$/;
+  if (!emailPattern.test(email)) {
+    alert("Please use a valid @iitg.ac.in institutional email.");
+    return;
+  }
+
+  // 🔒 Password validation
+  const password = formData.password;
+  const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  if (!passwordPattern.test(password)) {
+    alert("Password must be at least 8 characters long and include one uppercase letter, one number, and one special character.");
+    return;
+  }
+
   if (isLogin) {
     // Login
     const { data, error } = await supabase
       .from('employees')
       .select('password_hash')
-      .eq('email', formData.email)
+      .eq('email', email)
       .single();
 
-    if (error) {
+    if (error || !data) {
       alert("User not found");
       return;
     }
 
-    const isMatch = await bcrypt.compare(formData.password, data.password_hash);
+    const isMatch = await bcrypt.compare(password, data.password_hash);
     if (isMatch) {
       navigate('/home');
     } else {
@@ -44,23 +60,23 @@ const LandingPage: React.FC = () => {
   } else {
     // Sign Up
     if (
-      formData.email &&
-      formData.password &&
+      email &&
+      password &&
       formData.confirmPassword &&
       formData.name &&
       formData.employeeId
     ) {
-      if (formData.password !== formData.confirmPassword) {
+      if (password !== formData.confirmPassword) {
         alert("Passwords do not match");
         return;
       }
 
-      const password_hash = await bcrypt.hash(formData.password, 10);
+      const password_hash = await bcrypt.hash(password, 10);
 
       const { error } = await supabase.from('employees').insert([
         {
           employee_id: formData.employeeId,
-          email: formData.email,
+          email: email,
           name: formData.name,
           password_hash: password_hash,
         },
@@ -75,6 +91,7 @@ const LandingPage: React.FC = () => {
     }
   }
 };
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
