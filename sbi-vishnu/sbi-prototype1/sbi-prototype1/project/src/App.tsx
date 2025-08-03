@@ -7,50 +7,62 @@ import HomePage from './components/HomePage';
 import DefaulterPrediction from './components/DefaulterPrediction';
 import LastKnownLocation from './components/LastKnownLocation';
 import LoanApproval from './components/LoanApproval';
+import ProtectedRoute from './components/ProtectedRoute'; // 🔐 Import
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page without navbar/footer */}
+        {/* Public landing page (no auth) */}
         <Route path="/" element={<LandingPage />} />
-        
-        {/* Dashboard pages with navbar/footer */}
+
+        {/* Protected Dashboard routes */}
         <Route path="/home" element={
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex-1 pt-16">
-              <HomePage />
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-50 flex flex-col">
+              <Navbar />
+              <div className="flex-1 pt-16">
+                <HomePage />
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </ProtectedRoute>
         } />
+
         <Route path="/defaulter-prediction" element={
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex-1 pt-16">
-              <DefaulterPrediction />
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-50 flex flex-col">
+              <Navbar />
+              <div className="flex-1 pt-16">
+                <DefaulterPrediction />
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </ProtectedRoute>
         } />
+
         <Route path="/last-known-location" element={
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex-1 pt-16">
-              <LastKnownLocation />
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-50 flex flex-col">
+              <Navbar />
+              <div className="flex-1 pt-16">
+                <LastKnownLocation />
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </ProtectedRoute>
         } />
+
         <Route path="/loan-approval" element={
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex-1 pt-16">
-              <LoanApproval />
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-50 flex flex-col">
+              <Navbar />
+              <div className="flex-1 pt-16">
+                <LoanApproval />
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </ProtectedRoute>
         } />
       </Routes>
     </Router>
